@@ -1,0 +1,144 @@
+@model ECommerceGestao.Models.Order
+
+@{
+    ViewData["Title"] = "Detalhes do Pedido";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Detalhes do Pedido #@Model.Id</h1>
+        <a asp-action="Orders" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar para Pedidos
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Informações do Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Data do Pedido:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                            <p>
+                                <strong>Status:</strong>
+                                <span class="badge bg-@(Model.Status == "Delivered" ? "success" : 
+                                                      Model.Status == "Cancelled" ? "danger" : 
+                                                      Model.Status == "Processing" ? "primary" : 
+                                                      Model.Status == "Shipped" ? "info" : "warning")">
+                                    @Model.Status
+                                </span>
+                            </p>
+                            <p><strong>Método de Pagamento:</strong> @Model.PaymentMethod</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Total:</strong> R$ @Model.TotalAmount.ToString("N2")</p>
+                            <p><strong>Cliente:</strong> @Model.User.Name</p>
+                            <p><strong>Email:</strong> @Model.User.Email</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p><strong>Endereço de Entrega:</strong></p>
+                        <p class="border rounded p-2 bg-light">@Model.ShippingAddress</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Itens do Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Preço Unit.</th>
+                                    <th>Quantidade</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="@item.Product.ImageUrl" alt="@item.Product.Name" style="width: 50px; height: 50px; object-fit: cover;" class="me-3">
+                                                <div>
+                                                    <h6 class="mb-0">@item.Product.Name</h6>
+                                                    <small class="text-muted">@item.Product.Category.Name</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>R$ @item.UnitPrice.ToString("N2")</td>
+                                        <td>@item.Quantity</td>
+                                        <td>R$ @((item.Quantity * item.UnitPrice).ToString("N2"))</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                    <td><strong>R$ @Model.TotalAmount.ToString("N2")</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Atualizar Status</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateOrderStatus" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status do Pedido</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="Pending" selected="@(Model.Status == "Pending")">Pendente</option>
+                                <option value="Processing" selected="@(Model.Status == "Processing")">Em Processamento</option>
+                                <option value="Shipped" selected="@(Model.Status == "Shipped")">Enviado</option>
+                                <option value="Delivered" selected="@(Model.Status == "Delivered")">Entregue</option>
+                                <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelado</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Atualizar Status</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Ações</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" onclick="printOrder()">
+                            <i class="bi bi-printer"></i> Imprimir Pedido
+                        </button>
+                        <a href="mailto:@Model.User.Email" class="btn btn-outline-info">
+                            <i class="bi bi-envelope"></i> Enviar Email ao Cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function printOrder() {
+            window.print();
+        }
+    </script>
+}

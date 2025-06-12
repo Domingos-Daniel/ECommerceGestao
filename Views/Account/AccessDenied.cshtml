@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Acesso Negado";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 animate__animated animate__fadeIn">
+                <div class="card-body p-5 text-center">
+                    <div class="text-danger mb-4">
+                        <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem;"></i>
+                    </div>
+                    <h1 class="mb-3">Acesso Negado</h1>
+                    <p class="mb-4">Você não tem permissão para acessar esta página.</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Voltar para Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

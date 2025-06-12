@@ -1,0 +1,161 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <h1 class="mb-4">Dashboard Administrativo</h1>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Produtos</h6>
+                            <h2 class="mb-0">@ViewBag.ProductCount</h2>
+                        </div>
+                        <i class="bi bi-box fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-action="Products" class="text-white text-decoration-none">Ver todos <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Pedidos</h6>
+                            <h2 class="mb-0">@ViewBag.OrderCount</h2>
+                        </div>
+                        <i class="bi bi-cart-check fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-action="Orders" class="text-white text-decoration-none">Ver todos <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Clientes</h6>
+                            <h2 class="mb-0">@ViewBag.UserCount</h2>
+                        </div>
+                        <i class="bi bi-people fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <span class="text-white">Total de usuários</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-4">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-title">Vendas Totais</h6>
+                            <h2 class="mb-0">R$ @ViewBag.TotalSales.ToString("N2")</h2>
+                        </div>
+                        <i class="bi bi-currency-dollar fs-1"></i>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent border-0">
+                    <a asp-action="Reports" class="text-white text-decoration-none">Ver relatórios <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders and Low Stock Products -->
+    <div class="row">
+        <!-- Recent Orders -->
+        <div class="col-md-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Pedidos Recentes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in ViewBag.RecentOrders)
+                                {
+                                    <tr>
+                                        <td>@order.Id</td>
+                                        <td>@order.User.Name</td>
+                                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                                        <td>R$ @order.TotalAmount.ToString("N2")</td>
+                                        <td>
+                                            <span class="badge bg-@(order.Status == "Delivered" ? "success" : 
+                                                                 order.Status == "Cancelled" ? "danger" : 
+                                                                 order.Status == "Processing" ? "primary" : 
+                                                                 order.Status == "Shipped" ? "info" : "warning")">
+                                                @order.Status
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-end mt-3">
+                        <a asp-action="Orders" class="btn btn-primary">Ver Todos Pedidos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Low Stock Products -->
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Produtos com Estoque Baixo</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        @foreach (var product in ViewBag.LowStockProducts)
+                        {
+                            <div class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">@product.Name</h6>
+                                    <small class="text-@(product.Stock < 5 ? "danger" : "warning")">
+                                        @product.Stock unidades
+                                    </small>
+                                </div>
+                                <small class="text-muted">@product.Category.Name</small>
+                            </div>
+                        }
+                    </div>
+                    <div class="text-end mt-3">
+                        <a asp-action="Products" class="btn btn-primary">Gerenciar Produtos</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

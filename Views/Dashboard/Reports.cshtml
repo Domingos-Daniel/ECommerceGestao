@@ -1,0 +1,168 @@
+@{
+    ViewData["Title"] = "Relatórios de Vendas";
+}
+
+<div class="container-fluid mt-4">
+    <h1 class="mb-4">Relatórios de Vendas</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Vendas por Categoria</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Vendas por Mês (2025)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Produtos Mais Vendidos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade Vendida</th>
+                                    <th>Receita Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.TopProducts != null)
+                                {
+                                    foreach (var product in ViewBag.TopProducts)
+                                    {
+                                        <tr>
+                                            <td>@product.ProductName</td>
+                                            <td>@product.TotalQuantity</td>
+                                            <td>R$ @product.TotalRevenue.ToString("N2")</td>
+                                        </tr>
+                                    }
+                                }
+                                else 
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center">Sem dados disponíveis</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Parse data from ViewBag
+        const salesByCategory = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SalesByCategory ?? new []{ new { CategoryName = "Sem dados", TotalSales = 0 } }));
+        const salesByMonth = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.SalesByMonth ?? new []{ new { Month = 1, TotalSales = 0 } }));
+        
+        // Category chart
+        const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(categoryCtx, {
+            type: 'pie',
+            data: {
+                labels: salesByCategory.map(item => item.CategoryName),
+                datasets: [{
+                    data: salesByCategory.map(item => item.TotalSales),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = context.raw;
+                                return `R$ ${value.toFixed(2)}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Monthly chart
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+        
+        // Create array with all months (even if no sales)
+        const allMonthsData = [];
+        for (let i = 1; i <= 12; i++) {
+            const monthData = salesByMonth.find(item => item.Month === i);
+            allMonthsData.push({
+                Month: i,
+                TotalSales: monthData ? monthData.TotalSales : 0
+            });
+        }
+        
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: allMonthsData.map(item => monthNames[item.Month - 1]),
+                datasets: [{
+                    label: 'Vendas (R$)',
+                    data: allMonthsData.map(item => item.TotalSales),
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,343 @@
+:root {
+  --primary-color: #4361ee;
+  --secondary-color: #3f37c9;
+  --accent-color: #f72585;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --success-color: #4cc9f0;
+  --warning-color: #ff9e00;
+  --danger-color: #ef233c;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+}
+
+html {
+  font-size: 14px;
+  position: relative;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--primary-color);
+}
+
+body {
+  margin-bottom: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gray-100);
+  color: var(--dark-color);
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+}
+
+/* Custom styles */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-top: 80px; /* Aumentar espaço entre conteúdo e footer */
+  padding: 20px 0;
+  background-color: #343a40;
+  color: #fff;
+  text-align: center;
+  clear: both;
+}
+
+/* Product styles */
+.product-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card .card-body {
+  flex: 1 1 auto;
+}
+
+.product-card img {
+  height: 240px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.product-stock {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.product-category {
+  background-color: var(--gray-200);
+  color: var(--gray-600);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+/* Navbar styles */
+.navbar {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 1rem;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Dashboard styles */
+.dashboard-card {
+  border-left: 4px solid var(--primary-color);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-card-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+.dashboard-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.dashboard-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Cart badge */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  background-color: var(--accent-color);
+  color: white;
+  border-radius: 50%;
+}
+
+/* Custom form styles */
+.form-control:focus {
+  border-color: var(--primary-color);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Cart badge */
+.cart-badge {
+  position: absolute;
+  top: 0px;
+  right: -10px;
+  font-size: 0.7rem;
+}
+
+/* Custom buttons */
+.btn-primary {
+  background-color: #0d6efd;
+}
+
+.btn-success {
+  background-color: #198754;
+}
+
+/* Category labels */
+.category-badge {
+  background-color: #f8f9fa;
+  color: #212529;
+  padding: 0.35em 0.65em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-weight: 600;
+}
+
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+/* Ajustes para o footer */
+.footer {
+    background-color: var(--dark-color);
+    position: relative;
+    width: 100%;
+    margin-top: 80px; /* Aumentar espaço entre conteúdo e footer */
+    padding: 20px 0;
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    clear: both;
+}
+
+/* Adicionar efeito de transição suave ao passar o mouse sobre links do footer */
+.footer-links li a, .contact-info a, .social-icons a {
+    transition: all 0.3s ease;
+}
+
+.footer-links li a:hover {
+    color: var(--primary-color) !important;
+    transform: translateX(5px);
+}
+
+/* Melhorar os ícones de redes sociais no footer */
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+/* Assegurar que o conteúdo principal tenha margem suficiente para não ser coberto pelo footer */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Animação de entrada suave para o footer */
+.footer-fade-in {
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animação para o contador do carrinho */
+@keyframes cartCountUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+.cart-count-update {
+    animation: cartCountUpdate 0.5s ease;
+}
+
+/* Design responsivo para dispositivos móveis */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .card-footer .btn {
+        width: 100%;
+    }
+    
+    /* Página de checkout responsiva */
+    .checkout-page .row {
+        flex-direction: column-reverse;
+    }
+    
+    .checkout-page .col-md-4 {
+        margin-bottom: 20px;
+    }
+    
+    /* Melhorias para carrinho em telas pequenas */
+    .cart-item {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .cart-item .col-md-2, 
+    .cart-item .col-md-4 {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    /* Melhorar a navegação em dispositivos móveis */
+    .navbar-collapse {
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+}

@@ -1,0 +1,116 @@
+@model ECommerceGestao.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Registro";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-3 animate__animated animate__fadeIn">
+                <div class="card-header bg-primary text-white text-center p-4">
+                    <h3 class="mb-0 fw-bold">Criar uma nova conta</h3>
+                </div>
+                <div class="card-body p-5">
+                    <form asp-controller="Account" asp-action="Register" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Name" class="form-control" placeholder="Nome completo" />
+                            <label asp-for="Name">Nome completo</label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                          <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="nome@exemplo.com" autocomplete="username" />
+                            <label asp-for="Email">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input asp-for="Address" class="form-control" placeholder="Endereço" />
+                            <label asp-for="Address">Endereço</label>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="City" class="form-control" placeholder="Cidade" />
+                                    <label asp-for="City">Cidade</label>
+                                    <span asp-validation-for="City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="State" class="form-control" placeholder="Estado" />
+                                    <label asp-for="State">Estado</label>
+                                    <span asp-validation-for="State" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="ZipCode" class="form-control" placeholder="CEP" />
+                                    <label asp-for="ZipCode">CEP</label>
+                                    <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                          
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" class="form-control" placeholder="Senha" autocomplete="new-password" />
+                            <label asp-for="Password">Senha</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>                            <div class="form-text mt-2">
+                                <small>A senha deve conter pelo menos:</small>
+                                <ul class="small ps-3 mb-0 mt-1">
+                                    <li>8 caracteres</li>                                    <li>Uma letra maiúscula</li>
+                                    <li>Uma letra minúscula</li>
+                                    <li>Um número</li>
+                                    <li>Um caractere especial (ex: @@, #, $, !)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="form-floating mb-4">
+                            <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirmar senha" autocomplete="new-password" />
+                            <label asp-for="ConfirmPassword">Confirmar senha</label>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-person-plus me-2"></i>Registrar
+                            </button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p>Já tem uma conta? <a asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="text-primary">Entre aqui</a></p>
+                        </div>
+                    </form>
+                </div>            </div>
+        </div>
+        
+        <!-- Exemplos de senhas -->
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Dicas para criar uma senha segura</h5>
+            </div>
+            <div class="card-body">
+                <p>Exemplos de senhas que atendem aos requisitos:</p>
+                <ul>
+                    <li>Senha@@123</li>
+                    <li>Ecommerce#2025</li>
+                    <li>Loja$Online24</li>
+                    <li>Compras!2025</li>
+                </ul>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Use uma combinação de letras, números e símbolos para criar uma senha forte e única.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

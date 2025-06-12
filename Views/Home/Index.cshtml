@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ECommerceGestao.Models.Product>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="hero-section position-relative pt-5 mt-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 animate__animated animate__fadeInLeft">
+                <h1 class="display-4 fw-bold mb-4">Sistema de Gestão de E-Commerce</h1>
+                <p class="lead mb-4">Gerenciamento completo de Estoque e Vendas para sua Loja Online. Controle seu inventário, vendas e integrações com marketplaces em um só lugar.</p>
+                <div class="d-flex gap-3">
+                    <a href="#produtos" class="btn btn-primary btn-lg px-4">Ver Produtos</a>
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-primary btn-lg px-4">Dashboard</a>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block animate__animated animate__fadeInRight">
+                <img src="/images/ecommerce-hero.jpg" alt="E-commerce" class="img-fluid rounded shadow" onerror="this.src='/images/smartphone.jpg'; this.onerror='';">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5" id="produtos">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold border-start border-4 border-primary ps-3">Produtos em Destaque</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary">Ver Todos <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
+                <div class="card product-card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                        <span class="product-category position-absolute top-0 end-0 m-2">@product.Category.Name</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">@product.Name</h5>
+                        <p class="card-text text-muted">@product.Description.Substring(0, Math.Min(80, product.Description.Length))@(product.Description.Length > 80 ? "..." : "")</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="product-price">AOA @product.Price.ToString("F2")</span>
+                            <span class="product-stock"><i class="bi bi-box-seam me-1"></i>@product.Stock unid.</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid gap-2">
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-primary">
+                                <i class="bi bi-eye me-2"></i>Detalhes
+                            </a>
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-grid">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-cart-plus me-2"></i>Adicionar ao Carrinho
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,82 @@
+@model ECommerceGestao.Models.Order
+
+@{
+    ViewData["Title"] = "Detalhes do Pedido";
+}
+
+<div class="container mt-4">
+    <h1>Detalhes do Pedido #@Model.Id</h1>
+    <hr />
+
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Informações do Pedido</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Data do Pedido:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-@(Model.Status == "Delivered" ? "success" : 
+                                              Model.Status == "Cancelled" ? "danger" : 
+                                              Model.Status == "Processing" ? "primary" : 
+                                              Model.Status == "Shipped" ? "info" : "warning")">
+                            @Model.Status
+                        </span>
+                    </p>
+                    <p><strong>Cliente:</strong> @Model.User.Name</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Pagamento:</strong> @Model.PaymentMethod</p>
+                    <p><strong>Endereço de Entrega:</strong></p>
+                    <p>@Model.ShippingAddress</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4">Itens do Pedido</h5>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço Unitário</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.Product.ImageUrl" alt="@item.Product.Name" style="width: 50px; height: 50px; object-fit: cover;" class="me-3">
+                                        <div>
+                                            <h6 class="mb-0">@item.Product.Name</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@item.Quantity</td>
+                                <td>R$ @item.UnitPrice.ToString("F2")</td>
+                                <td>R$ @((item.Quantity * item.UnitPrice).ToString("F2"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>R$ @Model.TotalAmount.ToString("F2")</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a asp-action="MyOrders" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar para Meus Pedidos
+        </a>
+    </div>
+</div>

@@ -1,0 +1,268 @@
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Cart" asp-action="Index">Carrinho</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </nav>
+
+    <h1 class="fw-bold border-start border-4 border-primary ps-3 mb-4">Finalizar Pedido</h1>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger animate__animated animate__fadeIn">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            @TempData["Error"]
+        </div>
+    }    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4 shadow-sm border-0 animate__animated animate__fadeIn">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-person-lines-fill text-primary me-2"></i>
+                        Informações de Envio
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="PlaceOrder" method="post" class="needs-validation" novalidate>
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Nome Completo</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" name="fullName" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe seu nome completo.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">E-mail</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe um e-mail válido.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Telefone</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                    <input type="tel" name="phone" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe seu telefone.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">CEP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                    <input type="text" name="zipCode" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe seu CEP.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                               
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Endereço Completo</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-house"></i></span>
+                                <textarea name="shippingAddress" class="form-control" rows="3" required></textarea>
+                                <div class="invalid-feedback">
+                                    Por favor, informe seu endereço completo.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Método de Pagamento</label>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option border rounded p-3">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="Cartão de Crédito" required>
+                                        <label class="form-check-label w-100" for="creditCard">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-credit-card text-primary fs-3 me-3"></i>
+                                                <div>
+                                                    <span class="fw-bold d-block">Cartão de Crédito</span>
+                                                    <small class="text-muted">Visa, Mastercard, Amex</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option border rounded p-3">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="boleto" value="Boleto Bancário" required>
+                                        <label class="form-check-label w-100" for="boleto">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-upc text-primary fs-3 me-3"></i>
+                                                <div>
+                                                    <span class="fw-bold d-block">Boleto Bancário</span>
+                                                    <small class="text-muted">Vence em 3 dias</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-check payment-option border rounded p-3">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="Pix" required>
+                                        <label class="form-check-label w-100" for="pix">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-qr-code text-primary fs-3 me-3"></i>
+                                                <div>
+                                                    <span class="fw-bold d-block">Pix</span>
+                                                    <small class="text-muted">Pagamento instantâneo</small>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Confirmar Pedido
+                            </button>
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Voltar ao Carrinho
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+          <div class="col-md-4">
+            <div class="card shadow-sm border-0 sticky-top animate__animated animate__fadeIn" style="top: 100px;">
+                <div class="card-header bg-primary text-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-receipt me-2"></i>
+                        Resumo do Pedido
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal:</span>
+                        <span>AOA @ViewBag.CartTotal.ToString("F2")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Frete:</span>
+                        <span class="text-success">Grátis</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Impostos:</span>
+                        <span>AOA 0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Desconto:</span>
+                        <span>AOA 0.00</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <h5 class="fw-bold">Total:</h5>
+                        <h5 class="fw-bold text-primary">AOA @ViewBag.CartTotal.ToString("F2")</h5>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="alert alert-light border">
+                            <div class="d-flex">
+                                <i class="bi bi-shield-check text-success fs-3 me-3"></i>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Compra 100% segura</h6>
+                                    <p class="small mb-0">Seus dados estão protegidos e sua compra é segura.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-truck text-primary me-3"></i>
+                            <span>Entrega estimada em 7 dias úteis</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-arrow-return-left text-primary me-3"></i>
+                            <span>30 dias para devolução</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // JavaScript para validação de formulário
+        (function () {
+            'use strict'
+            
+            // Fetch all forms we want to apply validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+            
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+        
+        // Estilizar a opção de pagamento selecionada
+        document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remover classe ativa de todas as opções
+                document.querySelectorAll('.payment-option').forEach(option => {
+                    option.classList.remove('border-primary');
+                    option.classList.remove('bg-light');
+                });
+                
+                // Adicionar classe ativa à opção selecionada
+                if (this.checked) {
+                    this.closest('.payment-option').classList.add('border-primary');
+                    this.closest('.payment-option').classList.add('bg-light');
+                }
+            });
+        });
+    </script>
+    
+    <style>
+        .payment-option {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary-color) !important;
+            background-color: var(--gray-100);
+        }
+        
+        .payment-option .form-check-input {
+            margin-top: 0;
+        }
+        
+        .sticky-top {
+            z-index: 100;
+        }
+    </style>
+}

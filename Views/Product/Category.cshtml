@@ -1,0 +1,56 @@
+@model IEnumerable<ECommerceGestao.Models.Product>
+
+@{
+    ViewData["Title"] = "Categoria: " + ViewBag.CategoryName;
+}
+
+<div class="container mt-4">
+    <h1>Categoria: @ViewBag.CategoryName</h1>
+    
+    <div class="row mb-4">
+        <div class="col">
+            <form asp-controller="Product" asp-action="Search" method="get" class="d-flex">
+                <input type="text" name="searchString" class="form-control me-2" placeholder="Buscar produtos..." />
+                <button type="submit" class="btn btn-outline-primary">Buscar</button>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p>Não há produtos nesta categoria.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description.Substring(0, Math.Min(100, product.Description.Length))...</p>
+                            <p class="card-text"><strong>Preço:</strong> R$ @product.Price.ToString("F2")</p>
+                            <p class="card-text"><strong>Estoque:</strong> @product.Stock unidades</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Detalhes</a>
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-success">Adicionar ao Carrinho</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+    <div class="mt-3">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary">Ver Todos Produtos</a>
+    </div>
+</div>

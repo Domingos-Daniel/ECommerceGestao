@@ -1,0 +1,245 @@
+@model IEnumerable<ECommerceGestao.Models.Product>
+
+@{
+    ViewData["Title"] = "Gerenciar Produtos";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gerenciamento de Produtos</h1>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            <i class="bi bi-plus"></i> Novo Produto
+        </button>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" id="productSearch" class="form-control" placeholder="Pesquisar produtos...">
+                </div>
+                <div class="col-md-3">
+                    <select id="categoryFilter" class="form-select">
+                        <option value="">Todas Categorias</option>
+                        <option value="1">Eletrônicos</option>
+                        <option value="2">Vestuário</option>
+                        <option value="3">Livros</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="stockFilter" class="form-select">
+                        <option value="">Todos Estoques</option>
+                        <option value="low">Estoque Baixo (<10)</option>
+                        <option value="out">Sem Estoque (0)</option>
+                        <option value="available">Disponível (>0)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagem</th>
+                            <th>Nome</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@product.Id</td>
+                                <td>
+                                    <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                </td>
+                                <td>@product.Name</td>
+                                <td>@product.Category.Name</td>
+                                <td>R$ @product.Price.ToString("N2")</td>
+                                <td>
+                                    <span class="badge bg-@(product.Stock == 0 ? "danger" : (product.Stock < 10 ? "warning" : "success"))">
+                                        @product.Stock
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-primary edit-product" data-id="@product.Id">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-danger delete-product" data-id="@product.Id">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="productName" class="form-label">Nome do Produto</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="productCategory" class="form-label">Categoria</label>
+                            <select class="form-select" id="productCategory" required>
+                                <option value="">Selecionar Categoria</option>
+                                <option value="1">Eletrônicos</option>
+                                <option value="2">Vestuário</option>
+                                <option value="3">Livros</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productDescription" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="productDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="productPrice" class="form-label">Preço</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="productStock" class="form-label">Estoque</label>
+                            <input type="number" class="form-control" id="productStock" min="0" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Imagem URL</label>
+                        <input type="text" class="form-control" id="productImage" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveProduct">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Search functionality
+        document.getElementById('productSearch').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.children[2].textContent.toLowerCase();
+                if (name.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Category filter
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+            
+            if (filterValue === '') {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+            
+            rows.forEach(row => {
+                const categoryName = row.children[3].textContent;
+                const categoryId = getCategoryId(categoryName);
+                
+                if (categoryId == filterValue) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Stock filter
+        document.getElementById('stockFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+            
+            if (filterValue === '') {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+            
+            rows.forEach(row => {
+                const stock = parseInt(row.children[5].textContent.trim());
+                
+                switch(filterValue) {
+                    case 'low':
+                        row.style.display = (stock < 10) ? '' : 'none';
+                        break;
+                    case 'out':
+                        row.style.display = (stock === 0) ? '' : 'none';
+                        break;
+                    case 'available':
+                        row.style.display = (stock > 0) ? '' : 'none';
+                        break;
+                }
+            });
+        });
+        
+        // Helper function to get category ID from name
+        function getCategoryId(name) {
+            switch(name.trim()) {
+                case 'Eletrônicos': return 1;
+                case 'Vestuário': return 2;
+                case 'Livros': return 3;
+                default: return 0;
+            }
+        }
+        
+        // This is just a demonstration - in a real app, these would connect to your API
+        document.querySelectorAll('.edit-product').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('Edit functionality would be implemented with API calls to your backend');
+            });
+        });
+        
+        document.querySelectorAll('.delete-product').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja excluir este produto?')) {
+                    alert('Delete functionality would be implemented with API calls to your backend');
+                }
+            });
+        });
+        
+        document.getElementById('saveProduct').addEventListener('click', function() {
+            if (document.getElementById('addProductForm').checkValidity()) {
+                alert('Save functionality would be implemented with API calls to your backend');
+                $('#addProductModal').modal('hide');
+            } else {
+                alert('Por favor preencha todos os campos obrigatórios.');
+            }
+        });
+    </script>
+}
