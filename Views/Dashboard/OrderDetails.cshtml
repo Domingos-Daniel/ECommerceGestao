@@ -34,7 +34,7 @@
                             <p><strong>Método de Pagamento:</strong> @Model.PaymentMethod</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Total:</strong> R$ @Model.TotalAmount.ToString("N2")</p>
+                            <p><strong>Total:</strong> AOA @Model.TotalAmount.ToString("N2")</p>
                             <p><strong>Cliente:</strong> @Model.User.Name</p>
                             <p><strong>Email:</strong> @Model.User.Email</p>
                         </div>
@@ -75,16 +75,16 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>R$ @item.UnitPrice.ToString("N2")</td>
+                                        <td>AOA @item.UnitPrice.ToString("N2")</td>
                                         <td>@item.Quantity</td>
-                                        <td>R$ @((item.Quantity * item.UnitPrice).ToString("N2"))</td>
+                                        <td>AOA @((item.Quantity * item.UnitPrice).ToString("N2"))</td>
                                     </tr>
                                 }
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                    <td><strong>R$ @Model.TotalAmount.ToString("N2")</strong></td>
+                                    <td><strong>AOA @Model.TotalAmount.ToString("N2")</strong></td>
                                 </tr>
                             </tfoot>
                         </table>

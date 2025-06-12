@@ -134,3 +134,4 @@ C:\Users\Domingos Daniel\Desktop\ECommerceGestao\obj\Debug\net9.0\compressed\6zs
 C:\Users\Domingos Daniel\Desktop\ECommerceGestao\obj\Debug\net9.0\compressed\pnun6pvc6b-0uhbnae5xk.gz
 C:\Users\Domingos Daniel\Desktop\ECommerceGestao\obj\Debug\net9.0\compressed\soingat2ly-a25enxxmic.gz
 C:\Users\Domingos Daniel\Desktop\ECommerceGestao\obj\Debug\net9.0\compressed\xt4kn80x2g-lde10exgyq.gz
+C:\Users\Domingos Daniel\Desktop\ECommerceGestao\obj\Debug\net9.0\ECommerceGestao.sourcelink.json

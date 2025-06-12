@@ -55,7 +55,7 @@
                                         <tr>
                                             <td>@product.ProductName</td>
                                             <td>@product.TotalQuantity</td>
-                                            <td>R$ @product.TotalRevenue.ToString("N2")</td>
+                                            <td>AOA @product.TotalRevenue.ToString("N2")</td>
                                         </tr>
                                     }
                                 }
@@ -116,7 +116,7 @@
                         callbacks: {
                             label: function(context) {
                                 const value = context.raw;
-                                return `R$ ${value.toFixed(2)}`;
+                                return `AOA ${value.toFixed(2)}`;
                             }
                         }
                     }
@@ -143,7 +143,7 @@
             data: {
                 labels: allMonthsData.map(item => monthNames[item.Month - 1]),
                 datasets: [{
-                    label: 'Vendas (R$)',
+                    label: 'Vendas (AOA)',
                     data: allMonthsData.map(item => item.TotalSales),
                     backgroundColor: 'rgba(75, 192, 192, 0.7)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -157,7 +157,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return 'R$ ' + value;
+                                return 'AOA ' + value;
                             }
                         }
                     }

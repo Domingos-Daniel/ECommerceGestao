@@ -62,11 +62,12 @@ namespace ECommerceGestao.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
-                    var user = new ApplicationUser { 
+                {                    var user = new ApplicationUser { 
                         UserName = model.Email, 
                         Email = model.Email, 
                         Name = model.Name,
+                        PhoneNumber = model.PhoneNumber,
+                        IdentityNumber = model.IdentityNumber,
                         Address = model.Address ?? string.Empty,
                         City = model.City ?? string.Empty,
                         State = model.State ?? string.Empty,

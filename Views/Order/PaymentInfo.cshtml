@@ -1,0 +1,148 @@
+@model ECommerceGestao.Models.Order
+@using ECommerceGestao.Utilities
+
+@{
+    ViewData["Title"] = "Informações de Pagamento";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Order" asp-action="MyOrders">Meus Pedidos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Informações de Pagamento</li>
+        </ol>
+    </nav>
+
+    <h1 class="fw-bold border-start border-4 border-primary ps-3 mb-4">Informações de Pagamento</h1>
+    
+    <div class="alert alert-success mb-4">
+        <h4><i class="bi bi-check-circle"></i> Seu pedido foi registado!</h4>
+        <p>Utilize as instruções abaixo para finalizar o seu pagamento.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Detalhes do Pagamento - Pedido #@Model.Id</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Valor Total:</strong> AOA @Model.TotalAmount.ToString("F2")</p>
+                            <p><strong>Método de Pagamento:</strong> @Model.PaymentMethod</p>
+                            <p><strong>Referência:</strong> @AngolaUtils.GerarReferenciaMulticaixa(Model.Id)</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Data de Vencimento:</strong> @DateTime.Now.AddDays(2).ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+
+                    @if (Model.PaymentMethod == "Cartão Multicaixa")
+                    {
+                        <div class="alert alert-info">
+                            <h5><i class="bi bi-credit-card me-2"></i>Instruções para Pagamento via Multicaixa</h5>
+                            <ol>
+                                <li>Dirija-se a uma caixa ATM Multicaixa</li>
+                                <li>Insira o seu cartão e digite o seu PIN</li>
+                                <li>Selecione a opção "Pagamentos"</li>
+                                <li>Selecione "Compras" e depois "Pagamento de Serviços/Compras"</li>
+                                <li>Introduza a Entidade: <strong>00000</strong></li>
+                                <li>Introduza a Referência: <strong>@AngolaUtils.GerarReferenciaMulticaixa(Model.Id).Split(' ')[1]</strong></li>
+                                <li>Introduza o montante: <strong>AOA @Model.TotalAmount.ToString("F2")</strong></li>
+                                <li>Confirme os dados e finalize a operação</li>
+                            </ol>
+                        </div>
+                    }
+                    else if (Model.PaymentMethod == "Transferência Bancária")
+                    {
+                        <div class="alert alert-info">
+                            <h5><i class="bi bi-bank me-2"></i>Instruções para Transferência Bancária</h5>
+                            <p>Faça uma transferência para a seguinte conta:</p>
+                            <ul>
+                                <li><strong>Banco:</strong> BAI - Banco Angolano de Investimentos</li>
+                                <li><strong>Titular da Conta:</strong> ECommerceGestao, Lda.</li>
+                                <li><strong>Número da Conta:</strong> 00000000000000000</li>
+                                <li><strong>IBAN:</strong> AO06000000000000000000000</li>
+                                <li><strong>Valor:</strong> AOA @Model.TotalAmount.ToString("F2")</li>
+                                <li><strong>Referência/Descrição:</strong> Pedido @Model.Id</li>
+                            </ul>
+                            <p>Por favor, envie o comprovativo de pagamento para <strong>pagamentos@ecommercegestao.co.ao</strong></p>
+                        </div>
+                    }
+                    else if (Model.PaymentMethod == "e-Kwanza")
+                    {
+                        <div class="alert alert-info">
+                            <h5><i class="bi bi-wallet2 me-2"></i>Instruções para Pagamento via e-Kwanza</h5>
+                            <ol>
+                                <li>Abra o aplicativo e-Kwanza no seu telefone</li>
+                                <li>Selecione a opção "Pagamentos"</li>
+                                <li>Escaneie o código QR abaixo ou insira manualmente os dados</li>
+                                <li>Número do Comerciante: <strong>900 000 000</strong></li>
+                                <li>Referência: <strong>@Model.Id</strong></li>
+                                <li>Valor: <strong>AOA @Model.TotalAmount.ToString("F2")</strong></li>
+                                <li>Confirme a operação com a sua senha</li>
+                            </ol>
+                            <div class="text-center my-3">
+                                <div class="bg-light p-4 d-inline-block">
+                                    <i class="bi bi-qr-code" style="font-size: 150px;"></i>
+                                    <p class="mt-2"><small>Código QR ilustrativo</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                    <i class="bi bi-house me-2"></i>Página Inicial
+                </a>
+                <a asp-controller="Order" asp-action="MyOrders" class="btn btn-outline-secondary">
+                    <i class="bi bi-list-check me-2"></i>Meus Pedidos
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 100px;">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Resumo do Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>AOA @Model.TotalAmount.ToString("F2")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Frete:</span>
+                        <span class="text-success">Grátis</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="fw-bold">Total:</span>
+                        <span class="fw-bold fs-5">AOA @Model.TotalAmount.ToString("F2")</span>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <small>Seu pedido será processado após a confirmação do pagamento.</small>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h6 class="mb-3">Precisando de ajuda?</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-envelope text-primary me-2"></i>
+                            <span>suporte@ecommercegestao.co.ao</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-telephone text-primary me-2"></i>
+                            <span>+244 923 456 789</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

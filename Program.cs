@@ -3,6 +3,7 @@ using ECommerceGestao.Models;
 using ECommerceGestao.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,13 +76,15 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Seed the database
+// Atualizar o esquema do banco de dados primeiro
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var logger = services.GetRequiredService<ILogger<Program>>();
     try
-    {
+    {        // Atualizar o esquema do banco de dados para incluir as novas colunas
+        await ECommerceGestao.Data.DatabaseExtensions.UpdateDatabaseSchemaAsync(services, logger);
+        
         // Initialize database with product and category data
         await DbInitializer.Initialize(services, logger);
 

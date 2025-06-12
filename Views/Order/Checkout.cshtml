@@ -1,3 +1,4 @@
+@using ECommerceGestao.Utilities
 @{
     ViewData["Title"] = "Checkout";
 }
@@ -51,26 +52,30 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row mb-4">
+                        </div>                        <div class="row mb-4">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-bold">Telefone</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" name="phone" class="form-control" required>
+                                    <input type="tel" name="phone" class="form-control" placeholder="9XXXXXXXX" pattern="9[0-9]{8}" required>
                                     <div class="invalid-feedback">
-                                        Por favor, informe seu telefone.
+                                        Por favor, informe um número de telefone válido de Angola (ex: 9XXXXXXXX).
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">CEP</label>
+                                <small class="form-text text-muted">Formato: 9XXXXXXXX</small>
+                            </div>                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Província</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                                    <input type="text" name="zipCode" class="form-control" required>
+                                    <select name="province" class="form-select" required>
+                                        <option value="">Selecione uma província</option>
+                                        @foreach (var provincia in AngolaUtils.Provincias)
+                                        {
+                                            <option value="@provincia">@provincia</option>
+                                        }
+                                    </select>
                                     <div class="invalid-feedback">
-                                        Por favor, informe seu CEP.
+                                        Por favor, selecione sua província.
                                     </div>
                                 </div>
                             </div>
@@ -86,19 +91,32 @@
                                 </div>
                             </div>
                         </div>
-                        
+                          <div class="row mb-4">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-bold">Bilhete de Identidade</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                                    <input type="text" name="identityNumber" class="form-control" placeholder="000000000XX000" pattern="[0-9]{9}[A-Z]{2}[0-9]{3}" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe um número de BI válido (ex: 123456789LA123).
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Formato: 123456789LA123</small>
+                            </div>
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label fw-bold">Método de Pagamento</label>
                             <div class="row g-3">
                                 <div class="col-md-4">
                                     <div class="form-check payment-option border rounded p-3">
-                                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="Cartão de Crédito" required>
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="Cartão Multicaixa" required>
                                         <label class="form-check-label w-100" for="creditCard">
                                             <div class="d-flex align-items-center">
                                                 <i class="bi bi-credit-card text-primary fs-3 me-3"></i>
                                                 <div>
-                                                    <span class="fw-bold d-block">Cartão de Crédito</span>
-                                                    <small class="text-muted">Visa, Mastercard, Amex</small>
+                                                    <span class="fw-bold d-block">Multicaixa</span>
+                                                    <small class="text-muted">Cartão de débito</small>
                                                 </div>
                                             </div>
                                         </label>
@@ -106,13 +124,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-check payment-option border rounded p-3">
-                                        <input class="form-check-input" type="radio" name="paymentMethod" id="boleto" value="Boleto Bancário" required>
-                                        <label class="form-check-label w-100" for="boleto">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="Transferência Bancária" required>
+                                        <label class="form-check-label w-100" for="bankTransfer">
                                             <div class="d-flex align-items-center">
-                                                <i class="bi bi-upc text-primary fs-3 me-3"></i>
+                                                <i class="bi bi-bank text-primary fs-3 me-3"></i>
                                                 <div>
-                                                    <span class="fw-bold d-block">Boleto Bancário</span>
-                                                    <small class="text-muted">Vence em 3 dias</small>
+                                                    <span class="fw-bold d-block">Transferência</span>
+                                                    <small class="text-muted">Prazo de 24 horas</small>
                                                 </div>
                                             </div>
                                         </label>
@@ -120,13 +138,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-check payment-option border rounded p-3">
-                                        <input class="form-check-input" type="radio" name="paymentMethod" id="pix" value="Pix" required>
-                                        <label class="form-check-label w-100" for="pix">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="emola" value="e-Kwanza" required>
+                                        <label class="form-check-label w-100" for="emola">
                                             <div class="d-flex align-items-center">
-                                                <i class="bi bi-qr-code text-primary fs-3 me-3"></i>
+                                                <i class="bi bi-wallet2 text-primary fs-3 me-3"></i>
                                                 <div>
-                                                    <span class="fw-bold d-block">Pix</span>
-                                                    <small class="text-muted">Pagamento instantâneo</small>
+                                                    <span class="fw-bold d-block">e-Kwanza</span>
+                                                    <small class="text-muted">Pagamento móvel</small>
                                                 </div>
                                             </div>
                                         </label>

@@ -54,7 +54,7 @@
                                 <td>@order.Id</td>
                                 <td>@order.User.Name</td>
                                 <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>R$ @order.TotalAmount.ToString("N2")</td>
+                                <td>AOA @order.TotalAmount.ToString("N2")</td>
                                 <td>
                                     <span class="badge bg-@(order.Status == "Delivered" ? "success" : 
                                                          order.Status == "Cancelled" ? "danger" : 

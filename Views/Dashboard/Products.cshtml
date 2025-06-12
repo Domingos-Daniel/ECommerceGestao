@@ -61,7 +61,7 @@
                                 </td>
                                 <td>@product.Name</td>
                                 <td>@product.Category.Name</td>
-                                <td>R$ @product.Price.ToString("N2")</td>
+                                <td>AOA @product.Price.ToString("N2")</td>
                                 <td>
                                     <span class="badge bg-@(product.Stock == 0 ? "danger" : (product.Stock < 10 ? "warning" : "success"))">
                                         @product.Stock
@@ -119,7 +119,7 @@
                         <div class="col-md-6">
                             <label for="productPrice" class="form-label">Preço</label>
                             <div class="input-group">
-                                <span class="input-group-text">R$</span>
+                                <span class="input-group-text">AOAA</span>
                                 <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
                             </div>
                         </div>

@@ -8,9 +8,7 @@
     <div class="alert alert-success mb-4">
         <h4><i class="bi bi-check-circle"></i> Pedido Realizado com Sucesso!</h4>
         <p>Seu pedido foi recebido e está sendo processado.</p>
-    </div>
-
-    <div class="card mb-4">
+    </div>    <div class="card mb-4">
         <div class="card-header bg-primary text-white">
             <h5 class="mb-0">Detalhes do Pedido #@Model.Id</h5>
         </div>
@@ -20,10 +18,12 @@
                     <p><strong>Data do Pedido:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
                     <p><strong>Status:</strong> @Model.Status</p>
                     <p><strong>Pagamento:</strong> @Model.PaymentMethod</p>
+                    <p><strong>Referência:</strong> @($"AO{Model.Id:D6}{DateTime.Now.ToString("yyMMdd")}")</p>
                 </div>
                 <div class="col-md-6">
                     <p><strong>Endereço de Entrega:</strong></p>
                     <p>@Model.ShippingAddress</p>
+                    <p><strong>Prazo de entrega estimado:</strong> 2-5 dias úteis (Luanda) / 5-10 dias úteis (Outras Províncias)</p>
                 </div>
             </div>
 
@@ -44,15 +44,15 @@
                             <tr>
                                 <td>@item.Product.Name</td>
                                 <td>@item.Quantity</td>
-                                <td>R$ @item.UnitPrice.ToString("F2")</td>
-                                <td>R$ @((item.Quantity * item.UnitPrice).ToString("F2"))</td>
+                                <td>AOA @item.UnitPrice.ToString("F2")</td>
+                                <td>AOA @((item.Quantity * item.UnitPrice).ToString("F2"))</td>
                             </tr>
                         }
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                            <td><strong>R$ @Model.TotalAmount.ToString("F2")</strong></td>
+                            <td><strong>AOA @Model.TotalAmount.ToString("F2")</strong></td>
                         </tr>
                     </tfoot>
                 </table>

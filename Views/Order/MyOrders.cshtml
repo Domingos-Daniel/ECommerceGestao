@@ -30,17 +30,19 @@
                 </thead>
                 <tbody>
                     @foreach (var order in Model)
-                    {
-                        <tr>
-                            <td>@order.Id</td>
+                    {                        <tr>
+                            <td>@($"AO{order.Id:D6}")</td>
                             <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>R$ @order.TotalAmount.ToString("F2")</td>
-                            <td>
-                                <span class="badge bg-@(order.Status == "Delivered" ? "success" : 
-                                                     order.Status == "Cancelled" ? "danger" : 
-                                                     order.Status == "Processing" ? "primary" : 
-                                                     order.Status == "Shipped" ? "info" : "warning")">
-                                    @order.Status
+                            <td>AOA @order.TotalAmount.ToString("F2")</td><td>
+                                <span class="badge bg-@(order.Status == "Entregue" ? "success" : 
+                                                     order.Status == "Cancelado" ? "danger" : 
+                                                     order.Status == "Em processamento" ? "primary" : 
+                                                     order.Status == "Em transporte" ? "info" : "warning")">
+                                    @(order.Status == "Delivered" ? "Entregue" : 
+                                      order.Status == "Cancelled" ? "Cancelado" :
+                                      order.Status == "Processing" ? "Em processamento" :
+                                      order.Status == "Shipped" ? "Em transporte" :
+                                      order.Status == "Pending" ? "Pendente" : order.Status)
                                 </span>
                             </td>
                             <td>

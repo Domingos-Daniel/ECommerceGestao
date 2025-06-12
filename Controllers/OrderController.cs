@@ -58,14 +58,12 @@ namespace ECommerceGestao.Controllers
             if (user == null)
             {
                 return Challenge();
-            }
-
-            // Create order
+            }            // Create order
             var order = new Order
             {
                 UserId = user.Id,
                 OrderDate = DateTime.Now,
-                Status = "Pending",
+                Status = "Pendente",
                 TotalAmount = await _cartService.GetCartTotalAsync(),
                 ShippingAddress = shippingAddress,
                 PaymentMethod = paymentMethod,
@@ -106,14 +104,12 @@ namespace ECommerceGestao.Controllers
 
             TempData["Success"] = "Pedido realizado com sucesso!";
             return RedirectToAction("OrderConfirmation", new { id = order.Id });
-        }
-
-        // GET: Order/OrderConfirmation/5
+        }        // GET: Order/OrderConfirmation/5
         [Authorize]
         public async Task<IActionResult> OrderConfirmation(int id)
         {
             var order = await _context.Orders
-                .Include(o => o.OrderItems)
+                .Include(o => o.OrderItems!)
                 .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
@@ -123,7 +119,36 @@ namespace ECommerceGestao.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if (user.Id != order.UserId && !User.IsInRole("Admin"))
+            if (user == null || (user.Id != order.UserId && !User.IsInRole("Admin")))
+            {
+                return Forbid();
+            }
+
+            // Se for um método de pagamento que precisa de instruções adicionais, redirecionar para PaymentInfo
+            if (order.PaymentMethod == "Cartão Multicaixa" || 
+                order.PaymentMethod == "Transferência Bancária" || 
+                order.PaymentMethod == "e-Kwanza")
+            {
+                return RedirectToAction("PaymentInfo", new { id = order.Id });
+            }
+
+            return View(order);
+        }// GET: Order/PaymentInfo/5
+        [Authorize]
+        public async Task<IActionResult> PaymentInfo(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems!)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || (user.Id != order.UserId && !User.IsInRole("Admin")))
             {
                 return Forbid();
             }
@@ -132,10 +157,14 @@ namespace ECommerceGestao.Controllers
         }
 
         // GET: Order/MyOrders
-        [Authorize]
-        public async Task<IActionResult> MyOrders()
+        [Authorize]        public async Task<IActionResult> MyOrders()
         {
             var user = await _userManager.GetUserAsync(User);
+            
+            if (user == null)
+            {
+                return Challenge();
+            }
 
             var orders = await _context.Orders
                 .Where(o => o.UserId == user.Id)
@@ -158,10 +187,8 @@ namespace ECommerceGestao.Controllers
             if (order == null)
             {
                 return NotFound();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user.Id != order.UserId && !User.IsInRole("Admin"))
+            }            var user = await _userManager.GetUserAsync(User);
+            if (user == null || (user.Id != order.UserId && !User.IsInRole("Admin")))
             {
                 return Forbid();
             }

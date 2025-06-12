@@ -14,7 +14,7 @@ namespace ECommerceGestao.Models
 
         [Display(Name = "Lembrar de mim?")]
         public bool RememberMe { get; set; }
-    }public class RegisterViewModel
+    }    public class RegisterViewModel
     {
         [Required(ErrorMessage = "O nome é obrigatório")]
         [Display(Name = "Nome completo")]
@@ -23,6 +23,16 @@ namespace ECommerceGestao.Models
         [Required(ErrorMessage = "O email é obrigatório")]
         [EmailAddress(ErrorMessage = "Email inválido")]
         public string Email { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "O número de BI é obrigatório")]
+        [Display(Name = "Bilhete de Identidade")]
+        [RegularExpression(@"^\d{9}[A-Z]{2}\d{3}$", ErrorMessage = "Formato de BI inválido. Use o formato: 123456789LA123")]
+        public string IdentityNumber { get; set; } = string.Empty;
+        
+        [Required(ErrorMessage = "O número de telefone é obrigatório")]
+        [Display(Name = "Telefone")]
+        [RegularExpression(@"^9\d{8}$", ErrorMessage = "Formato de telefone inválido. Use o formato: 9XXXXXXXX")]
+        public string PhoneNumber { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "O endereço é obrigatório")]
         [Display(Name = "Endereço")]
@@ -32,12 +42,12 @@ namespace ECommerceGestao.Models
         [Display(Name = "Cidade")]
         public string City { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O estado é obrigatório")]
-        [Display(Name = "Estado")]
+        [Required(ErrorMessage = "A província é obrigatória")]
+        [Display(Name = "Província")]
         public string State { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "O CEP é obrigatório")]
-        [Display(Name = "CEP")]
+        [Required(ErrorMessage = "O código postal é obrigatório")]
+        [Display(Name = "Código Postal")]
         public string ZipCode { get; set; } = string.Empty;
         
         [Required(ErrorMessage = "A senha é obrigatória")]
